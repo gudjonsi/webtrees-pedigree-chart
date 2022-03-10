@@ -45,6 +45,10 @@ export default class Tree
      */
     draw(source)
     {
+console.log(this._hierarchy.nodes.descendants());
+console.log(this._hierarchy.nodes.links());
+console.log(this._hierarchy.nodes.leaves());
+
         let nodes = this._hierarchy.nodes.descendants();
         let links = this._hierarchy.nodes.links();
 

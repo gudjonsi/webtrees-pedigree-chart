@@ -269,6 +269,15 @@ class Module extends PedigreeChartModule implements ModuleCustomInterface
         $fatherTree = $this->buildJsonTree($family->husband(), $generation + 1);
         $motherTree = $this->buildJsonTree($family->wife(), $generation + 1);
 
+        $data['siblings'] = [];
+
+        /** @var Individual $child */
+        foreach ($family->children() as $child) {
+            if ($child->xref() !== $individual->xref()) {
+                $data['siblings'][] = $this->getIndividualData($child, $generation);
+            }
+        }
+
         // Add array of child nodes
         if ($fatherTree) {
             $data['parents'][] = $fatherTree;

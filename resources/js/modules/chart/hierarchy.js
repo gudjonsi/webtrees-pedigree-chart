@@ -45,29 +45,29 @@ export default class Hierarchy
         let root = d3.hierarchy(
             data,
             data => {
-                if (!this._configuration.showEmptyBoxes) {
-                    return data.parents;
-                }
-
-                // Fill up the missing parents to the requested number of generations
-                if (!data.parents && (data.generation < maxGenerations)) {
-                // if (!data.parents && (data.generation < this._configuration.generations)) {
-                    data.parents = [
-                        this.createEmptyNode(data.generation + 1, SEX_MALE),
-                        this.createEmptyNode(data.generation + 1, SEX_FEMALE)
-                    ];
-                }
-
-                // Add missing parent record if we got only one
-                if (data.parents && (data.parents.length < 2)) {
-                    if (data.parents[0].sex === SEX_MALE) {
-                        data.parents.push(
+                // Show empty boxes for missing individuals
+                if (this._configuration.showEmptyBoxes) {
+                    // Fill in the missing parents to the requested number of generations, but only up to a maximum
+                    // of the number of generations that is also contained in the data (this can be different from
+                    // the number actually specified in the form).
+                    if (!data.parents && (data.generation < maxGenerations)) {
+                        data.parents = [
+                            this.createEmptyNode(data.generation + 1, SEX_MALE),
                             this.createEmptyNode(data.generation + 1, SEX_FEMALE)
-                        );
-                    } else {
-                        data.parents.unshift(
-                            this.createEmptyNode(data.generation + 1, SEX_MALE)
-                        );
+                        ];
+                    }
+
+                    // Add missing parent record if we got only one
+                    if (data.parents && (data.parents.length < 2)) {
+                        if (data.parents[0].sex === SEX_MALE) {
+                            data.parents.push(
+                                this.createEmptyNode(data.generation + 1, SEX_FEMALE)
+                            );
+                        } else {
+                            data.parents.unshift(
+                                this.createEmptyNode(data.generation + 1, SEX_MALE)
+                            );
+                        }
                     }
                 }
 
